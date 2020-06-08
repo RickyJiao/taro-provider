@@ -1,0 +1,48 @@
+{
+  "name": "taro-provider",
+  "version": "1.0.1",
+  "description": "Taro provider is a helper library to easy use customized provider in taro application",
+  "keywords": [
+    "Taro",
+    "hook",
+    "provider"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && NODE_ENV=production webpack",
+    "build:dev": "rimraf dist && webpack "
+  },
+  "author": {
+    "name": "Ricky Jiao",
+    "email": "ricky.jiao86@gmail.com"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RickyJiao/taro-provider.git"
+  },
+  "peerDependencies": {
+    "@tarojs/taro": "2.2.7"
+  },
+  "devDependencies": {
+    "@babel/core": "7.9.0",
+    "@babel/preset-env": "7.9.5",
+    "@babel/preset-react": "7.9.4",
+    "@types/react": "16.4.6",
+    "awesome-typescript-loader": "5.2.1",
+    "babel-loader": "8.1.0",
+    "@tarojs/taro": "2.2.7",
+    "typescript": "3.8.3",
+    "webpack": "4.29.6",
+    "webpack-cli": "3.3.11"
+  },
+  "dependencies": {
+    "@types/node": "^14.0.11"
+  }
+}
