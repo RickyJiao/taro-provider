@@ -1,8 +1,8 @@
 # taro-provider
 
-React use cache is an local cache manager to cache response data in memory. It will automatically return previous cached one when requesting the same data from serve to:
-- improve performance
-- avoid multiple same requests to server to reduce server pressure
+Taro-provider is a helper library to easily use `react` `createContext` hooks in tara application.
+
+Since there is no root component in `mini-program`, each page will be rendered in a different context. It is hard to use `provider` in taro application. A possible solution is that: store provider context in global object and then restore it in each page. Official `@tarojs/redux` takes this workaround solution. However, there are few hacks in `taro-cli` to implement this solution. It's not easy for people to create our own provider. This is why we created this library
 
 ## Installation
 
@@ -21,56 +21,91 @@ $ yarn add taro-provider
 ## Example
 
 ### createProvider
-React hook for cache promises fulfill value. Use with `fetch` or `axiso` together to avoid multiple same request to server. Here is an example to cache blog detail object.
 
-Once a new comment is created, we are able to use `updateCache` to update the cached object.
 
 ```jsx
-// Blog.tsx
-import React, { useState } from 'react';
-import { useParams } from 'react-router';
-import { useCache } from 'taro-provider';
+// GroupsProvider.ts
+import { createProvider } from 'taro-provider';
 
-export default function Blog() {
-  const { id: blogId } = useParams();
-  const { isFetching, data: blog, updateCache } = useCache(
-    () => axios.get(`/blog/${blogId}`),
-    `BLOG_${blogId}`
-  );
-  const [comment, setComment] = useState<string>('');
+interface IGroupsContext {
+  getGroups(): Object[];
+  getGroup(groupUuid: string): Object | undefined;
+};
 
-  async function addComment() {
-    const addedComment = await axios.post(`/blog/${blogId}/comment`, {
-      comment: comment,
-    });
+export const GroupsProviderContextName = 'GroupsProvider';
 
-    const newComments = [...(blog.comments || []), addedComment];
+export const GroupsProvider = createProvider<IGroupsContext>({
+  name: GroupsProviderContextName,
+  create() {
+    return {
+      getGroups() {
+        return [{
+          uuid: 'xxxx',
+          name: 'Group Name'
+        }]
+      },
 
-    updateCache({
-      ...blog,
-      comments: newComments,
-    });
+      getGroup(groupUuid: string) {
+        return {
+          uuid: 'xxxx',
+          name: 'Group Name'
+        };
+      },
+    };
   }
+})
+```
+
+### init Provider in app.tsx
+```jsx
+import Taro, { Component, Config } from '@tarojs/taro'
+import { GroupsProvider } from './providers/GroupsProvider';
+import Index from './pages/home/index'
+
+// init group provider
+GroupsProvider.init();
+
+class App extends Component {
+  render() {
+    return (
+      <GroupsProvider.Provider>
+        <Index />
+      </GroupsProvider.Provider>
+    );
+  }
+}
+```
+
+### use Provider in pages
+
+```jsx
+/// groups.tsx
+import Taro from '@tarojs/taro';
+import { View } from '@tarojs/components';
+
+import { GroupsProvider } from '../../providers';
+import GroupView from '../../components/Group';
+
+import './index.css'
+
+export default function Groups() {
+  const { getGroups } = GroupsProvider.useProvider();
+  const groups = getGroups();
 
   return (
-    <div>
-      {isFetching && <span>Loading...</span>}
-      {blog && (
-        <div>
-          <div>...render blog content here</div>
-          <div>...render comment list</div>
-        </div>
-      )}
-      <div>
-        <textarea
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        ></textarea>
-        <button onClick={addComment}>Add comment</button>
-      </div>
-    </div>
+    <View className={cxClassName}>
+      { groups.map(group => {
+          return <GroupView key={group.uuid} {...group} />
+        })
+      }
+    </View>
   );
 }
+
+Groups.config = {
+  navigationBarTitleText: 'Groups'
+}
+
 ```
 
 

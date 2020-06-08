@@ -33,6 +33,6 @@ module.exports = {
   },
 
   externals: {
-    '@tarojs/taro': 'commonjs react'
+    '@tarojs/taro': 'commonjs @tarojs/taro'
   }
 };
