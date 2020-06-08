@@ -23,10 +23,6 @@ export function setProvider<T extends Object>(context: T, providerName: string) 
   }
 }
 
-export interface ProviderProps<T> {
-  value: T;
-}
-
 export type createProviderContext<T> = () => T;
 
 export function initProvider<T>(providerName: string, createContext: createProviderContext<T>) {
