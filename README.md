@@ -22,33 +22,40 @@ $ yarn add taro-provider
 
 ### createProvider
 
-
 ```jsx
 // GroupsProvider.ts
+import Taro, { useState, useEffect } from '@tarojs/taro';
 import { createProvider } from 'taro-provider';
 
 interface IGroupsContext {
-  getGroups(): Object[];
-  getGroup(groupUuid: string): Object | undefined;
+  getGroups(): { groups: Object[], isLoading: boolean };
 };
 
-export const GroupsProviderContextName = 'GroupsProvider';
+export const GroupsProviderContextName2 = 'GroupsProvider';
 
-export const GroupsProvider = createProvider<IGroupsContext>({
+export const GroupsProvider2 = createProvider<IGroupsContext>({
   name: GroupsProviderContextName,
   create() {
     return {
       getGroups() {
-        return [{
-          uuid: 'xxxx',
-          name: 'Group Name'
-        }]
-      },
+        const [groups, setGroups] = useState<Object[]>([]);
+        const [isLoading, setIsLoading] = useState<boolean>(false);
 
-      getGroup(groupUuid: string) {
+        useEffect(() => {
+          setIsLoading(true);
+
+          Taro.request<Group[]>({
+            url: '/api/v1/groups'
+          }).then(result => {
+            setGroups(result.data);
+          }).finally(() => {
+            setIsLoading(false);
+          })
+        }, []);
+
         return {
-          uuid: 'xxxx',
-          name: 'Group Name'
+          groups,
+          isLoading
         };
       },
     };
@@ -57,10 +64,11 @@ export const GroupsProvider = createProvider<IGroupsContext>({
 ```
 
 ### init Provider in app.tsx
+
 ```jsx
-import Taro, { Component, Config } from '@tarojs/taro'
-import { GroupsProvider } from './providers/GroupsProvider';
-import Index from './pages/home/index'
+import Taro, { Component, Config } from "@tarojs/taro";
+import { GroupsProvider } from "./providers/GroupsProvider";
+import Index from "./pages/home/index";
 
 // init group provider
 GroupsProvider.init();
@@ -80,13 +88,13 @@ class App extends Component {
 
 ```jsx
 /// groups.tsx
-import Taro from '@tarojs/taro';
-import { View } from '@tarojs/components';
+import Taro from "@tarojs/taro";
+import { View } from "@tarojs/components";
 
-import { GroupsProvider } from '../../providers';
-import GroupView from '../../components/Group';
+import { GroupsProvider } from "../../providers";
+import GroupView from "../../components/Group";
 
-import './index.css'
+import "./index.css";
 
 export default function Groups() {
   const { getGroups } = GroupsProvider.useProvider();
@@ -94,20 +102,17 @@ export default function Groups() {
 
   return (
     <View className={cxClassName}>
-      { groups.map(group => {
-          return <GroupView key={group.uuid} {...group} />
-        })
-      }
+      {groups.map((group) => {
+        return <GroupView key={group.uuid} {...group} />;
+      })}
     </View>
   );
 }
 
 Groups.config = {
-  navigationBarTitleText: 'Groups'
-}
-
+  navigationBarTitleText: "Groups",
+};
 ```
-
 
 ## Contributing
 

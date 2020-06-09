@@ -1,6 +1,6 @@
 {
   "name": "taro-provider",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Taro provider is a helper library to easy use customized provider in taro application",
   "keywords": [
     "Taro",
