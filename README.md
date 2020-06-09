@@ -4,6 +4,8 @@ Taro-provider is a helper library to easily use `react` `createContext` hooks in
 
 Since there is no root component in `mini-program`, each page will be rendered in a different context. It is hard to use `provider` in taro application. A possible solution is that: store provider context in global object and then restore it in each page. Official `@tarojs/redux` takes this workaround solution. However, there are few hacks in `taro-cli` to implement this solution. It's not easy for people to create our own provider. This is why we created this library
 
+hack solution in `taro-cli` under https://github.com/NervJS/taro/blob/e0166b508ed997cc0a2bddcb478a5f4b1888ffe5/packages/taro-transformer-wx/src/index.ts#L851
+
 ## Installation
 
 Using npm:
