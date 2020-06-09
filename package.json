@@ -34,7 +34,7 @@
     "@babel/core": "7.9.0",
     "@babel/preset-env": "7.9.5",
     "@babel/preset-react": "7.9.4",
-    "@types/react": "16.4.6",
+    "@types/react": "^16.9.4",
     "awesome-typescript-loader": "5.2.1",
     "babel-loader": "8.1.0",
     "@tarojs/taro": "2.2.7",
