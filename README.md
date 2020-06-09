@@ -33,9 +33,9 @@ interface IGroupsContext {
   getGroups(): { groups: Object[], isLoading: boolean };
 };
 
-export const GroupsProviderContextName2 = 'GroupsProvider';
+export const GroupsProviderContextName = 'GroupsProvider';
 
-export const GroupsProvider2 = createProvider<IGroupsContext>({
+export const GroupsProvider = createProvider<IGroupsContext>({
   name: GroupsProviderContextName,
   create() {
     return {
