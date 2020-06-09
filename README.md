@@ -91,7 +91,7 @@ class App extends Component {
 ```jsx
 /// groups.tsx
 import Taro from "@tarojs/taro";
-import { View } from "@tarojs/components";
+import { View, Text } from "@tarojs/components";
 
 import { GroupsProvider } from "../../providers";
 import GroupView from "../../components/Group";
@@ -100,13 +100,15 @@ import "./index.css";
 
 export default function Groups() {
   const { getGroups } = GroupsProvider.useProvider();
-  const groups = getGroups();
+  const { isLoading, groups } = getGroups();
 
   return (
     <View className={cxClassName}>
-      {groups.map((group) => {
-        return <GroupView key={group.uuid} {...group} />;
-      })}
+      {isLoading && <Text> Loading... </Text>}
+      {groups &&
+        groups.map((group) => {
+          return <GroupView key={group.uuid} {...group} />;
+        })}
     </View>
   );
 }
