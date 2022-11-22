@@ -41,6 +41,6 @@
     "@tarojs/taro": "2.2.7",
     "typescript": "3.8.3",
     "webpack": "4.29.6",
-    "webpack-cli": "3.3.11"
+    "webpack-cli": "3.3.12"
   }
 }
